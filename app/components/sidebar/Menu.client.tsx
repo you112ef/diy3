@@ -331,13 +331,10 @@ export const Menu = () => {
         variants={menuVariants}
         // Responsive width applied directly in className
         className={classNames(
-          'flex selection-accent flex-col side-menu fixed top-0 h-full w-full sm:w-[340px]',
-        // The style prop is removed as width is handled by Tailwind classes now
-        className={classNames(
           'flex selection-accent flex-col side-menu fixed top-0 h-full w-full sm:w-[340px]', // Full width on small, 340px on sm and up
           'bg-white dark:bg-gray-950 border-r border-gray-100 dark:border-gray-800/50',
           'shadow-sm text-sm',
-          isSettingsOpen ? 'z-40' : 'z-sidebar',
+          isSettingsOpen ? 'z-40' : 'z-sidebar'
         )}
       >
         <div className="h-12 flex items-center justify-between px-4 border-b border-gray-100 dark:border-gray-800/50 bg-gray-50/50 dark:bg-gray-900/50">
