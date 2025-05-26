@@ -41,7 +41,7 @@ export const UserMessage = memo(function UserMessage({ content }: UserMessagePro
       <Markdown html>{textContent}</Markdown>
     </div>
   );
-}
+}); // Corrected: Added closing parenthesis for memo and semicolon
 
 function stripMetadata(content: string) {
   const artifactRegex = /<boltArtifact\s+[^>]*>[\s\S]*?<\/boltArtifact>/gm;
