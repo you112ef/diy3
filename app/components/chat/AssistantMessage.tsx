@@ -69,7 +69,7 @@ export const AssistantMessage = memo(({ content, annotations, messageId, onRewin
             <Popover side="right" align="start" trigger={<div className="i-ph:info" />}>
               {chatSummary && (
                 <div className="max-w-chat">
-                  <div className="summary max-h-96 flex flex-col">
+                  <div className="summary max-h-48 sm:max-h-64 md:max-h-96 flex flex-col">
                     <h2 className="border border-bolt-elements-borderColor rounded-md p4">Summary</h2>
                     <div style={{ zoom: 0.7 }} className="overflow-y-auto m4">
                       <Markdown>{chatSummary}</Markdown>
@@ -117,7 +117,7 @@ export const AssistantMessage = memo(({ content, annotations, messageId, onRewin
                     <button
                       onClick={() => onRewind(messageId)}
                       key="i-ph:arrow-u-up-left"
-                      className="i-ph:arrow-u-up-left text-xl text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary transition-colors"
+                      className="i-ph:arrow-u-up-left text-lg sm:text-xl text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary transition-colors"
                     />
                   </WithTooltip>
                 )}
@@ -126,7 +126,7 @@ export const AssistantMessage = memo(({ content, annotations, messageId, onRewin
                     <button
                       onClick={() => onFork(messageId)}
                       key="i-ph:git-fork"
-                      className="i-ph:git-fork text-xl text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary transition-colors"
+                      className="i-ph:git-fork text-lg sm:text-xl text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary transition-colors"
                     />
                   </WithTooltip>
                 )}

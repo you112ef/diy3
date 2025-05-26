@@ -13,15 +13,15 @@ const badgeVariants = cva(
           'border-transparent bg-bolt-elements-background text-bolt-elements-textPrimary hover:bg-bolt-elements-background/80',
         secondary:
           'border-transparent bg-bolt-elements-background text-bolt-elements-textSecondary hover:bg-bolt-elements-background/80',
-        destructive: 'border-transparent bg-red-500/10 text-red-500 hover:bg-red-500/20',
+        destructive: 'border-transparent bg-red-500/10 text-red-700 hover:bg-red-500/20 dark:text-red-400', // Changed text-red-500 to text-red-700, added dark:text-red-400
         outline: 'text-bolt-elements-textPrimary',
         primary: 'bg-purple-500/10 text-purple-600 dark:text-purple-400',
         success: 'bg-green-500/10 text-green-600 dark:text-green-400',
-        warning: 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400',
+        warning: 'bg-yellow-500/10 text-yellow-700 hover:bg-yellow-500/20 dark:text-yellow-300', // Changed text-yellow-600 to text-yellow-700, added dark:text-yellow-300 and hover
         danger: 'bg-red-500/10 text-red-600 dark:text-red-400',
         info: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
         subtle:
-          'border border-bolt-elements-borderColor/30 dark:border-bolt-elements-borderColor-dark/30 bg-white/50 dark:bg-bolt-elements-background-depth-4/50 backdrop-blur-sm text-bolt-elements-textSecondary dark:text-bolt-elements-textSecondary-dark',
+          'border border-bolt-elements-borderColor/30 dark:border-bolt-elements-borderColor/30 bg-white/50 dark:bg-bolt-elements-background-depth-4/50 backdrop-blur-sm text-bolt-elements-textSecondary dark:text-bolt-elements-textSecondary', // Corrected dark theme variables
       },
       size: {
         default: 'rounded-full px-2.5 py-0.5 text-xs font-semibold',

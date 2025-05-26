@@ -171,7 +171,7 @@
 
   --bolt-elements-dividerColor: theme('colors.gray.100');
 
-  --bolt-elements-prompt-background: theme('colors.alpha.gray.80');
+  --bolt-elements-prompt-background: theme('colors.gray.950'); /* Changed from alpha.gray.80 for OLED */
 
   --bolt-elements-sidebar-dropdownShadow: theme('colors.alpha.gray.30');
   --bolt-elements-sidebar-buttonBackgroundDefault: theme('colors.alpha.accent.10');

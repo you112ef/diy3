@@ -3,11 +3,13 @@
  * Preventing TS checks with files presented in the video for a better presentation.
  */
 import type { JSONValue, Message } from 'ai';
-import React, { type RefCallback, useEffect, useState } from 'react';
+import React, { type RefCallback, useEffect, useState, lazy, Suspense } from 'react'; // Added lazy, Suspense
+import { DndProvider } from 'react-dnd'; // Added DndProvider
+import { HTML5Backend } from 'react-dnd-html5-backend'; // Added HTML5Backend
 import { ClientOnly } from 'remix-utils/client-only';
 import { Menu } from '~/components/sidebar/Menu.client';
 import { IconButton } from '~/components/ui/IconButton';
-import { Workbench } from '~/components/workbench/Workbench.client';
+// import { Workbench } from '~/components/workbench/Workbench.client'; // Lazy load this
 import { classNames } from '~/utils/classNames';
 import { PROVIDER_LIST } from '~/utils/constants';
 import { Messages } from './Messages.client';
@@ -585,8 +587,9 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                         />
                       )}
                     </ClientOnly>
-                    <div className="flex justify-between items-center text-sm p-4 pt-2">
-                      <div className="flex gap-1 items-center">
+                    {/* Modified for responsiveness: flex-wrap and gap-2 */}
+                    <div className="flex flex-wrap justify-between items-center text-sm p-4 pt-2 gap-2">
+                      <div className="flex flex-wrap gap-1 items-center"> {/* Also allow this inner group to wrap */}
                         <IconButton title="Upload file" className="transition-all" onClick={() => handleFileUpload()}>
                           <div className="i-ph:paperclip text-xl"></div>
                         </IconButton>
@@ -665,11 +668,15 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
           </div>
           <ClientOnly>
             {() => (
-              <Workbench
-                actionRunner={actionRunner ?? ({} as ActionRunner)}
-                chatStarted={chatStarted}
-                isStreaming={isStreaming}
-              />
+              <DndProvider backend={HTML5Backend}> {/* Added DndProvider Wrapper */}
+                <Suspense fallback={<div>Loading Workbench...</div>}>
+                  <Workbench
+                    actionRunner={actionRunner ?? ({} as ActionRunner)}
+                    chatStarted={chatStarted}
+                    isStreaming={isStreaming}
+                  />
+                </Suspense>
+              </DndProvider>
             )}
           </ClientOnly>
         </div>
@@ -678,6 +685,10 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
 
     return <Tooltip.Provider delayDuration={200}>{baseChat}</Tooltip.Provider>;
   },
+);
+
+const Workbench = lazy(() =>
+  import('~/components/workbench/Workbench.client').then(module => ({ default: module.Workbench }))
 );
 
 function ScrollToBottom() {

@@ -16,11 +16,20 @@ export const themeStore = atom<Theme>(initStore());
 function initStore() {
   if (!import.meta.env.SSR) {
     const persistedTheme = localStorage.getItem(kTheme) as Theme | undefined;
+    // If a theme is stored in localStorage, use it
+    if (persistedTheme) {
+      return persistedTheme;
+    }
+    // Else, if no theme in localStorage, check system preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      // Set HTML attribute here too if we decide system preference should be immediately reflected
+      // document.querySelector('html')?.setAttribute('data-theme', 'dark');
+      return 'dark';
+    }
+    // Fallback to HTML data-theme attribute on the HTML element, or default theme
     const themeAttribute = document.querySelector('html')?.getAttribute('data-theme');
-
-    return persistedTheme ?? (themeAttribute as Theme) ?? DEFAULT_THEME;
+    return (themeAttribute as Theme) ?? DEFAULT_THEME;
   }
-
   return DEFAULT_THEME;
 }
 

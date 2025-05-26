@@ -2,6 +2,7 @@
  * @ts-nocheck
  * Preventing TS checks with files presented in the video for a better presentation.
  */
+import { memo } from 'react'; // Import memo
 import { MODEL_REGEX, PROVIDER_REGEX } from '~/utils/constants';
 import { Markdown } from './Markdown';
 
@@ -9,7 +10,7 @@ interface UserMessageProps {
   content: string | Array<{ type: string; text?: string; image?: string }>;
 }
 
-export function UserMessage({ content }: UserMessageProps) {
+export const UserMessage = memo(function UserMessage({ content }: UserMessageProps) { // Wrap with memo
   if (Array.isArray(content)) {
     const textItem = content.find((item) => item.type === 'text');
     const textContent = stripMetadata(textItem?.text || '');
@@ -24,8 +25,8 @@ export function UserMessage({ content }: UserMessageProps) {
               key={index}
               src={item.image}
               alt={`Image ${index + 1}`}
-              className="max-w-full h-auto rounded-lg"
-              style={{ maxHeight: '512px', objectFit: 'contain' }}
+              className="max-w-full h-auto rounded-lg object-contain max-h-64 sm:max-h-80 md:max-h-[32rem]"
+              loading="lazy"
             />
           ))}
         </div>

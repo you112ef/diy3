@@ -3,12 +3,12 @@ import { classNames } from '~/utils/classNames';
 import { type ChatHistoryItem } from '~/lib/persistence';
 import WithTooltip from '~/components/ui/Tooltip';
 import { useEditChatDescription } from '~/lib/hooks';
-import { forwardRef, type ForwardedRef, useCallback } from 'react';
+import { forwardRef, type ForwardedRef, useCallback, memo } from 'react'; // Import memo
 import { Checkbox } from '~/components/ui/Checkbox';
 
 interface HistoryItemProps {
   item: ChatHistoryItem;
-  onDelete?: (event: React.UIEvent) => void;
+  onRequestDeleteItem?: (item: ChatHistoryItem) => void; // Changed onDelete to onRequestDeleteItem
   onDuplicate?: (id: string) => void;
   exportChat: (id?: string) => void;
   selectionMode?: boolean;
@@ -16,9 +16,9 @@ interface HistoryItemProps {
   onToggleSelection?: (id: string) => void;
 }
 
-export function HistoryItem({
+export const HistoryItem = memo(function HistoryItem({ // Wrap with memo
   item,
-  onDelete,
+  onRequestDeleteItem, // Changed onDelete to onRequestDeleteItem
   onDuplicate,
   exportChat,
   selectionMode = false,
@@ -57,12 +57,13 @@ export function HistoryItem({
       event.preventDefault();
       event.stopPropagation();
       console.log('Delete button clicked for item:', item.id);
-
-      if (onDelete) {
-        onDelete(event as unknown as React.UIEvent);
+      // event.preventDefault(); // No longer needed here as it's a direct call
+      // event.stopPropagation(); // No longer needed here
+      if (onRequestDeleteItem) {
+        onRequestDeleteItem(item); // Pass the item directly
       }
     },
-    [onDelete, item.id],
+    [onRequestDeleteItem, item], // item is a dependency now
   );
 
   return (

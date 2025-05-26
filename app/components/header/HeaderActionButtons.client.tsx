@@ -68,9 +68,9 @@ export function HeaderActionButtons({}: HeaderActionButtonsProps) {
   };
 
   return (
-    <div className="flex">
+    <div className="flex flex-wrap gap-2">
       <div className="relative" ref={dropdownRef}>
-        <div className="flex border border-bolt-elements-borderColor rounded-md overflow-hidden mr-2 text-sm">
+        <div className="flex border border-bolt-elements-borderColor rounded-md overflow-hidden text-sm">
           <Button
             active
             disabled={isDeploying || !activePreview || isStreaming}

@@ -1,9 +1,9 @@
 import { motion, type Variants } from 'framer-motion';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react'; // Added lazy and Suspense
 import { toast } from 'react-toastify';
 import { Dialog, DialogButton, DialogDescription, DialogRoot, DialogTitle } from '~/components/ui/Dialog';
 import { ThemeSwitch } from '~/components/ui/ThemeSwitch';
-import { ControlPanel } from '~/components/@settings/core/ControlPanel';
+// import { ControlPanel } from '~/components/@settings/core/ControlPanel'; // Commented out for lazy load
 import { SettingsButton } from '~/components/ui/SettingsButton';
 import { Button } from '~/components/ui/Button';
 import { db, deleteById, getAll, chatId, type ChatHistoryItem, useChatHistory } from '~/lib/persistence';
@@ -19,7 +19,7 @@ const menuVariants = {
   closed: {
     opacity: 0,
     visibility: 'hidden',
-    left: '-340px',
+    left: '-100%', // Changed for better mobile off-screen positioning
     transition: {
       duration: 0.2,
       ease: cubicEasingFn,
@@ -303,10 +303,10 @@ export const Menu = () => {
     };
   }, [isSettingsOpen]);
 
-  const handleDuplicate = async (id: string) => {
+  const handleDuplicate = useCallback(async (id: string) => {
     await duplicateCurrentChat(id);
     loadEntries(); // Reload the list after duplication
-  };
+  }, [duplicateCurrentChat, loadEntries]);
 
   const handleSettingsClick = () => {
     setIsSettingsOpen(true);
@@ -329,9 +329,12 @@ export const Menu = () => {
         initial="closed"
         animate={open ? 'open' : 'closed'}
         variants={menuVariants}
-        style={{ width: '340px' }}
+        // Responsive width applied directly in className
         className={classNames(
-          'flex selection-accent flex-col side-menu fixed top-0 h-full',
+          'flex selection-accent flex-col side-menu fixed top-0 h-full w-full sm:w-[340px]',
+        // The style prop is removed as width is handled by Tailwind classes now
+        className={classNames(
+          'flex selection-accent flex-col side-menu fixed top-0 h-full w-full sm:w-[340px]', // Full width on small, 340px on sm and up
           'bg-white dark:bg-gray-950 border-r border-gray-100 dark:border-gray-800/50',
           'shadow-sm text-sm',
           isSettingsOpen ? 'z-40' : 'z-sidebar',
@@ -531,7 +534,15 @@ export const Menu = () => {
         </div>
       </motion.div>
 
-      <ControlPanel open={isSettingsOpen} onClose={handleSettingsClose} />
+      {isSettingsOpen && ( // Conditionally render Suspense and ControlPanel
+        <Suspense fallback={<div>Loading settings...</div>}>
+          <ControlPanel open={isSettingsOpen} onClose={handleSettingsClose} />
+        </Suspense>
+      )}
     </>
   );
 };
+
+const ControlPanel = lazy(() =>
+  import('~/components/@settings/core/ControlPanel').then((module) => ({ default: module.ControlPanel })),
+);

@@ -1,5 +1,5 @@
 import { useStore } from '@nanostores/react';
-import { memo, useMemo } from 'react';
+import { memo, useMemo, lazy, Suspense } from 'react'; // Added lazy, Suspense
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import * as Tabs from '@radix-ui/react-tabs';
 import {
@@ -20,7 +20,7 @@ import { renderLogger } from '~/utils/logger';
 import { isMobile } from '~/utils/mobile';
 import { FileBreadcrumb } from './FileBreadcrumb';
 import { FileTree } from './FileTree';
-import { DEFAULT_TERMINAL_SIZE, TerminalTabs } from './terminal/TerminalTabs';
+import { DEFAULT_TERMINAL_SIZE } from './terminal/TerminalTabs'; // TerminalTabs itself will be lazy loaded
 import { workbenchStore } from '~/lib/stores/workbench';
 import { Search } from './Search'; // <-- Ensure Search is imported
 import { classNames } from '~/utils/classNames'; // <-- Import classNames if not already present
@@ -179,8 +179,14 @@ export const EditorPanel = memo(
           </PanelGroup>
         </Panel>
         <PanelResizeHandle />
-        <TerminalTabs />
+        <Suspense fallback={<div>Loading Terminal...</div>}>
+          <TerminalTabs />
+        </Suspense>
       </PanelGroup>
     );
   },
+);
+
+const TerminalTabs = lazy(() =>
+  import('./terminal/TerminalTabs').then(module => ({ default: module.TerminalTabs }))
 );
