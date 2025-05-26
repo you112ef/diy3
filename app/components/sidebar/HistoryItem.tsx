@@ -156,7 +156,7 @@ export const HistoryItem = memo(function HistoryItem({ // Wrap with memo
       )}
     </div>
   );
-}
+}); // Corrected: Added closing parenthesis for memo and semicolon
 
 const ChatActionButton = forwardRef(
   (
